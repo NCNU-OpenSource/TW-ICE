@@ -1,8 +1,8 @@
 import mysql.connector
 from mysql.connector import Error
-import time
+import time, os
 #TODO:輸出格式的規格化
-
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 #目前只使用一個table,方便管理將名字打在這邊,倘若未來有所擴增table可直接帶入其他名稱。
 table_name = 'test_proudct'
 
@@ -132,4 +132,3 @@ def delete_data_use_serial_number(serial_number):
 
     # 確認資料有存入資料庫
     connection.commit()
-
