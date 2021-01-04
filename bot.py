@@ -9,7 +9,7 @@ from telepot.namedtuple import KeyboardButton as Btn
 import DB_CRUD as db
 import mysql.connector ,time ,os
 from mysql.connector import Error
-
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 # show all items in the refrigerator
 def getItemList():
     global totalList, itemString
@@ -26,8 +26,15 @@ def getItemList():
         itemString =  "There is Nothing in the refrigerator :("
     return itemString
 
+# def getNewItem():
+#     url = BASE_DIR + "\\villagerlimits.PNG"
+#     inlineBtns = [
+#                     [[InlineKeyboardButton(text="btn1",callback_data='I have Nothing To do'), InlineKeyboardButton(text="btn2",callback_data='0'),InlineKeyboardButton(text="btn3",callback_data='0'), InlineKeyboardButton(text="btn4",callback_data='0')]
+#                 ]
+#     bot.sendPhoto("781745255", photo=open(url, 'rb'), reply_markup = InlineKeyboardMarkup(inline_keyboard= inlineBtns))
+
 def on_chat_message(msg):
-    global itemString
+    global itemString,chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
     if content_type == 'text':
         bot.sendMessage(chat_id, msg['text'])
@@ -42,7 +49,7 @@ def on_chat_message(msg):
                 ]
             time.sleep(1)
             bot.sendMessage(chat_id, 'Here\'s all function buttons', reply_markup=ReplyMarkup(keyboard=replyBtns))
-        
+
         elif msg['text'] == '/show' :
             test = ''
             test = getItemList()
@@ -50,7 +57,8 @@ def on_chat_message(msg):
             print(test)
             bot.sendMessage(chat_id, test)
         elif msg['text'] == '/update' :
-            bot.sendMessage(chat_id, "2")
+            url = BASE_DIR + "\\villagerlimits.PNG"
+            bot.sendPhoto(chat_id, photo=open(url, 'rb'))
         elif msg['text'] == '/add'  :
             bot.sendMessage(chat_id, "3")
 
@@ -60,14 +68,15 @@ if __name__ == '__main__':
     with open(os.path.join(BASE_DIR, 'token.txt')) as f:
         TELEGRAM_BOT_TOKEN = f.read().strip() # Telegram Bot Token
     bot = telepot.Bot(TELEGRAM_BOT_TOKEN)
-    bot.sendMessage("781745255", "hello")
+    #bot.sendMessage("781745255", "hello")
     print("I'm listening...")
 
     # global variables
     totalList = db.read_all_data()
-    print(totalList)
+    #print(totalList)
     itemString = '條碼號 品名' + '\n'
-
+    chat_id=''
+    getNewItem()
     MessageLoop(bot,on_chat_message).run_as_thread()
     while 1:
         time.sleep(10)
