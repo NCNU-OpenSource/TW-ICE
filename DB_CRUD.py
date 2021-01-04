@@ -115,3 +115,4 @@ def delete_data_use_serial_number(serial_number):
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
 
+read_all_data()
