@@ -1,5 +1,6 @@
 import telepot
 import time
+import datetime
 from telepot.loop import MessageLoop
 from pprint import pprint
 from telepot.namedtuple import InlineKeyboardMarkup 
@@ -10,6 +11,7 @@ import DB_CRUD as db
 import mysql.connector ,time ,os
 from mysql.connector import Error
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+
 # show all items in the refrigerator
 def getItemList():
     global totalList, itemString
@@ -26,7 +28,7 @@ def getItemList():
         itemString =  "There is Nothing in the refrigerator :("
     return itemString
 
-# def updateItem(barcode,itemname,expirationDate)
+# def updateItem(barcode,itemname,expirationDate):
 #     update_data_use_serial_number(1,itemname,barcode)
 #     update_data_use_serial_number((5,itemname,barcode))
 
@@ -41,6 +43,7 @@ def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     ## 
     inputdata = msg['text'].split() 
+    print(inputdata)
     if content_type == 'text':
         bot.sendMessage(chat_id, msg['text'])
         #pprint(msg)
@@ -50,7 +53,7 @@ def on_chat_message(msg):
         if inputdata[0] == '/help' :
             replyBtns = [
                     [Btn(text='/show')],
-                    [Btn(text='/add'), Btn(text='/updateInfo'), Btn(text='/delete')],
+                    [Btn(text='/updateInfo'), Btn(text='/delete')],
                     [Btn(text='/Immediate item'), Btn(text='/Expiring item')]
                 ]
             time.sleep(1)
@@ -63,10 +66,20 @@ def on_chat_message(msg):
             print(test)
             bot.sendMessage(chat_id, test)
         elif inputdata[0] == '/updateInfo' :
-            #if(len(inputdata)<3)
-                bot.sendMessage(chat_id, "3")
+            if len(inputdata)==4 :
+                if inputdata[3].lower()[-1] =='h':
+
+                elif inputdata[3].lower()[-1] =='d':
+
+                elif inputdata[3].lower()[-1] =='y':
+                #datetime.datetime
+                #9h/H 10d/D 1y/Y
+                
+                # 需要補判斷輸入的日期型態
+            else: 
+                bot.sendMessage(chat_id, 'please input itemname and expirationDate')
         elif inputdata[0] == '/add'  :
-            bot.sendMessage(chat_id, "3")
+            bot.sendMessage(chat_id, '')
 
 if __name__ == '__main__':
     
@@ -84,17 +97,10 @@ if __name__ == '__main__':
     totalList = db.read_all_data()
     itemString = '條碼號 品名' + '\n'
    
-    #MessageLoop(bot, {'chat': on_chat_message, 'callback_query': on_callback_query}).run_as_thread()
     MessageLoop(bot,on_chat_message).run_as_thread()
     while 1:
         time.sleep(10)
 
-
-
-
-# url = BASE_DIR + "\\villagerlimits.PNG"
-            # barcode = 'test0999'
-            # bot.sendPhoto(chat_id, photo=open(url, 'rb'), caption = 'There is a new item: ' + barcode + ' !')
 
 
 
