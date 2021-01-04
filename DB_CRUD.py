@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 import time, os
+# -*- coding: utf-8 -*-
 #TODO:輸出格式的規格化
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 #目前只使用一個table,方便管理將名字打在這邊,倘若未來有所擴增table可直接帶入其他名稱。
