@@ -15,6 +15,8 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 # show all items in the refrigerator
 def getItemList():
     global totalList, itemString
+    totalList = db.read_data_in_ref()
+    itemString = '條碼號 品名' + '\n'
     if totalList:
         for item in totalList:
             tmp = item  # tmp[0]: pk, tmp[1]: Bar code, tmp[2]: item name
@@ -31,6 +33,12 @@ def getItemList():
 # def updateItem(barcode,itemname,expirationDate):
 #     update_data_use_serial_number(1,itemname,barcode)
 #     update_data_use_serial_number((5,itemname,barcode))
+
+# wait for the part of web cam
+def takeOffItem(chat_id_list,barcode,url):
+    openurl = BASE_DIR + url
+    for i in chat_id_list:
+        bot.sendPhoto(i, photo=open(openurl, 'rb'), caption = barcode + ' has been took off!')
 
 # wait for the part of web cam
 def getNewItem(chat_id_list,barcode,url):
@@ -62,16 +70,27 @@ def on_chat_message(msg):
         elif inputdata[0] == '/show' :
             test = ''
             test = getItemList()
-            print(type(test))
             print(test)
             bot.sendMessage(chat_id, test)
         elif inputdata[0] == '/updateInfo' :
+            # barcode is illegal
+            #if db.checkdata(inputdata[2]) == 1
+                #bot.sendMessage(chat_id, 'please input itemname and expirationDate')
+            
             if len(inputdata)==4 :
-                if inputdata[3].lower()[-1] =='h':
-
-                elif inputdata[3].lower()[-1] =='d':
-
-                elif inputdata[3].lower()[-1] =='y':
+                bot.sendMessage(chat_id, 'please input itemname and expirationDate')
+                #/ asdasd  
+                #if inputdata[3].lower()[-1] =='h':
+                #h = 9H
+                #bot.sendMessage(chat_id, 'tmp')
+                #elif inputdata[3].lower()[-1] =='d':
+                #d
+                #elif inputdata[3].lower()[-1] =='y':
+                #y
+                #db.read_specified_data_use_serial_number(inputdata[2])[0][5]
+                #result = time.strftime('%Y-%m-%d %H:%M:%S', t)
+                #t = datetime.timedelta(hours=h , days= d, weeks=y)
+                #db.update_data_use_serial_number(5,t,)
                 #datetime.datetime
                 #9h/H 10d/D 1y/Y
                 
@@ -91,12 +110,11 @@ if __name__ == '__main__':
     testurl = "\\villagerlimits.PNG"
     barcode = 'test0999'
     chat_id_list = {'217724690'} #'781745255',
-    getNewItem(chat_id_list,barcode,testurl)
-
+    #getNewItem(chat_id_list,barcode,testurl)
+    #takeOffItem(chat_id_list,barcode,testurl)
     # global variables
-    totalList = db.read_all_data()
-    itemString = '條碼號 品名' + '\n'
-   
+    itemString = ''
+    totalList = []
     MessageLoop(bot,on_chat_message).run_as_thread()
     while 1:
         time.sleep(10)
