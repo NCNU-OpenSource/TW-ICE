@@ -122,9 +122,3 @@ def delete_data_use_serial_number(serial_number):
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
 
-<<<<<<< Updated upstream
-=======
-# b = '0'
-# a = 'A0002'
-# update_data_use_serial_number(7,b,a)
->>>>>>> Stashed changes

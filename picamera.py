@@ -17,8 +17,10 @@ def check_data(qrcode_number):
     if db.read_specified_data_use_serial_number(qrcode_number): # data is exist
         if db.read_specified_data_use_serial_number(qrcode_number)[0][8] == 1:
             take_out(qrcode_number)
+            return int(2)
         elif db.read_specified_data_use_serial_number(qrcode_number)[0][8] == 0:
             put_in_again(qrcode_number)
+            return int(3)
     else: # data is not exist
         photoURL = BASE_DIR + '\\photo\\' + qrcode_number
         exptime = 0
@@ -36,6 +38,15 @@ def check_data(qrcode_number):
             print('data format error')
             return 0
         db.create_new_data_with_qrcode(qrcode_number, exptime, photoURL)
+        return int(1)
 
-a = 'B001'
-check_data(a)
+# a = 'B002'
+# b = check_data(a)
+# if b == 1:
+#     print('new data')
+# elif b == 2:
+#     print('take out')
+# elif b == 3:
+#     print('put in')
+# else:
+#     print('error')
