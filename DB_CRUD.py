@@ -129,7 +129,9 @@ def calculate_exp_notified_time():
     limit_time = datetime.timedelta(hours=8)
     for item in datalist:
         if item[6]-datetime.datetime.now() < limit_time:
-            tmp = item[1] + ',' + item[2] + ',' + str(item[6]-datetime.datetime.now())
+            tmp = []
+            tmp.append(item[1])
+            tmp.append(str(item[6]-datetime.datetime.now()))
             exp_notify_list.append(tmp)
     return exp_notify_list
 
@@ -141,4 +143,4 @@ def delete_data_use_serial_number(serial_number):
     number = (str(serial_number),)
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
-# create_new_table()
+#print(calculate_exp_notified_time()[0])

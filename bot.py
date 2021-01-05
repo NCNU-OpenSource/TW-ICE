@@ -8,6 +8,7 @@ from telepot.namedtuple import InlineKeyboardButton
 from telepot.namedtuple import ReplyKeyboardMarkup as ReplyMarkup
 from telepot.namedtuple import KeyboardButton as Btn
 import DB_CRUD as db
+import scan_cv as sc
 import mysql.connector ,time ,os
 from mysql.connector import Error
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -91,12 +92,7 @@ if __name__ == '__main__':
     totalList = db.read_all_data()
     while 1:
         itemString = '條碼號 品名' + '\n'
-        MessageLoop(bot,on_chat_message).run_as_thread()
+        sc.grab_photo()
+        print(1)
+        # MessageLoop(bot,on_chat_message).run_as_thread()
         time.sleep(10)
-
-
-
-
-
-
-
