@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 def getItemList():
     global totalList, itemString
     totalList = db.read_data_in_ref()
-    itemString = 'qrcode  name  expire_date' + '\n'
+    itemString = 'QRcode  name  expire_date' + '\n'
     if totalList:
         for item in totalList:
             #tmp = item  # tmp[0]: pk, tmp[1]: qrcode, tmp[2]: item name, tmp[6]: expire_date
@@ -26,9 +26,7 @@ def getItemList():
                 itemString = itemString + item[1] + '\t' + 'None ' + '\t' + str(item[6]) + '\n'
             else:
                 itemString = itemString + item[1] + '\t' + item[2]  + '\t' + str(item[6]) + '\n'
-            print(item[6])
-            print(type(item[6]))
-    # nothing in the refrigerator
+    # there is nothing
     else:
         itemString =  "There is Nothing in the refrigerator :("
     return itemString
@@ -54,20 +52,20 @@ def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     ## 
     inputdata = msg['text'].split() 
-    print(inputdata)
+    #print(inputdata)
     if content_type == 'text':
         #bot.sendMessage(chat_id, msg['text'])
-        pprint(msg)
+        #pprint(msg)
         chat_id = msg['chat']['id']
         from_id = msg['from']['id']
-        # demo用途,把不在清單內的用戶加入清單,新食品進入時一起推播
+        # for demo
         if chat_id not in chat_id_list :
             chat_id_list.append(chat_id)
         #print(chat_id)
         # reply photo to set item name and expire_date
         # if msg['reply_to_message']:
         #     tmp = msg['reply_to_message']['caption'].split()
-        #     qrcode_number = tmp[5]
+        #     QRcode_number = tmp[5]
         #     item_name = inputdata[0]
         #     expire_date = inputdata[1]
         #     print(item_name,expire_date)
@@ -75,7 +73,7 @@ def on_chat_message(msg):
             replyBtns = [
                     [Btn(text='/show')],
                     [Btn(text='/updateInfo')],
-                    [Btn(text='/Immediate item'), Btn(text='/Expiring item')]
+                    [Btn(text='/Immediate_item'), Btn(text='/Expiring_item')]
                 ]
             bot.sendMessage(chat_id, 'Here\'s all function buttons', reply_markup=ReplyMarkup(keyboard=replyBtns))
         elif inputdata[0] == '/show' :
@@ -83,7 +81,7 @@ def on_chat_message(msg):
             show = getItemList()
             bot.sendMessage(chat_id, show)
         elif inputdata[0] == '/updateInfo' :
-            # qrcode is illegal
+            #QRcode illigle
             if len(inputdata)==4 :
                 date = inputdata[3].split('/')
                 if len(date)==4 :
@@ -95,32 +93,45 @@ def on_chat_message(msg):
                     updateItem(inputdata[1],inputdata[2],t)
                     bot.sendMessage(chat_id,  msg['text']+ '\n' + 'Success!')
                 else :
-                    bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <qrcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
+                    bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
             else: 
-                bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <qrcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
-        elif inputdata[0] == '/Immediate item'  :
-            bot.sendMessage(chat_id, '')
-        elif inputdata[0] == '/Expiring item'  :
-            bot.sendMessage(chat_id, '')
-
+                bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
+        elif inputdata[0] == '/Immediate_item'  :
+            immediateList = db.calculate_exp_notified_time()
+            if immediateList :
+                bot.sendMessage(chat_id, 'These foods are about to expire !')
+                for people in chat_id_list:
+                    for item in immediateList:
+                        openurl = BASE_DIR + item[2]
+                        bot.sendMessage(chat_id,openurl)
+                        #bot.sendPhoto(people, photo=open(openurl, 'rb'), caption =  'Name:' + item[0] +' ' + 'CountDown:' + item[1])
+            else :
+                bot.sendMessage(chat_id, 'No food is about to expire!')
+        elif inputdata[0] == '/Expiring_item'  :
+            expiredList = db.calculate_exped_notified_time()
+            if expiredList:
+                bot.sendMessage(chat_id, 'These foods are expired !')
+                for people in chat_id_list:
+                    for item in expiredList:
+                        openurl = BASE_DIR + item[2]
+                        bot.sendMessage(chat_id,openurl)
+                        #bot.sendPhoto(people, photo=open(openurl, 'rb'), caption =  'Name:' + item[0] +' ' + 'CountDown:' + item[1])
+            else :
+                bot.sendMessage(chat_id, 'No food is expired !')  
 
 if __name__ == '__main__':
-    
+
+    # global variables
+    itemString = ''
+    totalList = []
+    chat_id_list = []
+
+
     BASE_DIR = os.path.dirname(os.path.realpath(__file__)) # catch token
     with open(os.path.join(BASE_DIR, 'token.txt')) as f:
         TELEGRAM_BOT_TOKEN = f.read().strip() # Telegram Bot Token
     bot = telepot.Bot(TELEGRAM_BOT_TOKEN)
     print("I'm listening...")
-    testurl = "\\villagerlimits.PNG"
-    qrcode = 'test0999'
-    chat_id_list = [] #'217724690','781745255',
-    
-    #getNewItem(chat_id_list,qrcode,testurl)
-    #takeOffItem(chat_id_list,qrcode,testurl)
-    # global variables
-    itemString = ''
-    totalList = []
     MessageLoop(bot,on_chat_message).run_as_thread()
     while 1:
         time.sleep(10)
-
