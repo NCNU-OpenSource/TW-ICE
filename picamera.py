@@ -40,6 +40,21 @@ def check_data(qrcode_number):
         db.create_new_data_with_qrcode(qrcode_number, exptime, photoURL)
         return int(1)
 
+# db.create_new_table()
+# a = 'A0000{}'
+# name = ['apple','banana','fish','chicken','rice']
+# b = 'B0000{}'
+# c = 'C0000{}'
+# for i in range(5):
+#     check_data(a.format(i))
+#     db.update_data_use_serial_number(1,name[i],a.format(i))
+# for i in range(5):
+#     check_data(b.format(i))
+#     db.update_data_use_serial_number(1,name[i],b.format(i))
+# for i in range(5):
+#     check_data(c.format(i))
+#     db.update_data_use_serial_number(1,name[i],c.format(i))
+
 # a = 'B002'
 # b = check_data(a)
 # if b == 1:

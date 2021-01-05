@@ -27,7 +27,6 @@ def create_new_table():
     mycursor = connection.cursor()
     sql = "CREATE TABLE {} (id INT AUTO_INCREMENT PRIMARY KEY, serial_number VARCHAR(255), name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, first_time DATETIME, recent_input_time DATETIME NULL, recent_output_time DATETIME NULL, expiration_date DATETIME NULL, photo_url VARCHAR(255), product_status BOOLEAN);"
     mycursor.execute( sql.format(table_name) )
-    #mycursor.execute("CREATE TABLE test_proudct (id INT AUTO_INCREMENT PRIMARY KEY, serial_number VARCHAR(255), name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, first_time DATETIME, recent_input_time DATETIME NULL, recent_output_time DATETIME NULL, expiration_date DATETIME NULL)")
 
     if (connection.is_connected()):
         mycursor.close()
@@ -56,6 +55,14 @@ def read_all_data():
     myresult = mycursor.fetchall()
     # for x in myresult:
     #     print(x)
+    return myresult
+
+def read_data_in_ref():
+    connection = connector()
+    mycursor = connection.cursor()
+    sql = "SELECT * FROM {} WHERE product_status = 1"
+    mycursor.execute(sql.format(table_name))
+    myresult = mycursor.fetchall()
     return myresult
 
 def read_specified_data_use_serial_number(serial_number):
@@ -106,12 +113,25 @@ def update_data_use_serial_number(update_type,update_data,serial_number):
     elif update_type == 7: # type 7 update product_status
         sql = "UPDATE {} SET product_status = %s WHERE serial_number = %s"
         val = (update_data, serial_number)
+    elif update_type == 8: # type 8 update expiration_notified_time
+        sql = "UPDATE {} SET expiration_notified_time = %s WHERE serial_number = %s"
+        val = (update_data, serial_number)
     else:
         print("None type is {} , please choose again.".format(update_type))
         return 0
 
     mycursor.execute(sql.format(table_name), val)
     connection.commit()
+        
+def calculate_exp_notified_time():
+    datalist = read_data_in_ref()
+    exp_notify_list = []
+    limit_time = datetime.timedelta(hours=8)
+    for item in datalist:
+        if item[6]-datetime.datetime.now() < limit_time:
+            tmp = item[1] + ',' + item[2] + ',' + str(item[6]-datetime.datetime.now())
+            exp_notify_list.append(tmp)
+    return exp_notify_list
 
 def delete_data_use_serial_number(serial_number):
     connection = connector()
@@ -121,4 +141,4 @@ def delete_data_use_serial_number(serial_number):
     number = (str(serial_number),)
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
-
+# create_new_table()
