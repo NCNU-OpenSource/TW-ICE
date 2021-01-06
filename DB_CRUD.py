@@ -113,9 +113,6 @@ def update_data_use_serial_number(update_type,update_data,serial_number):
     elif update_type == 7: # type 7 update product_status
         sql = "UPDATE {} SET product_status = %s WHERE serial_number = %s"
         val = (update_data, serial_number)
-    elif update_type == 8: # type 8 update expiration_notified_time
-        sql = "UPDATE {} SET expiration_notified_time = %s WHERE serial_number = %s"
-        val = (update_data, serial_number)
     else:
         print("None type is {} , please choose again.".format(update_type))
         return 0
@@ -127,13 +124,29 @@ def calculate_exp_notified_time():
     datalist = read_data_in_ref()
     exp_notify_list = []
     limit_time = datetime.timedelta(hours=8)
+    limit_time2 = datetime.timedelta(hours=0)
+    for item in datalist:
+        if item[6]-datetime.datetime.now() < limit_time:
+            if item[6]-datetime.datetime.now() > limit_time2:
+                tmp = []
+                tmp.append(item[1])
+                tmp.append(str(item[6]-datetime.datetime.now()))
+                tmp.append(item[7])
+                exp_notify_list.append(tmp)
+    return exp_notify_list
+
+def calculate_exped_notified_time():
+    datalist = read_data_in_ref()
+    exped_notify_list = []
+    limit_time = datetime.timedelta(hours=0)
     for item in datalist:
         if item[6]-datetime.datetime.now() < limit_time:
             tmp = []
             tmp.append(item[1])
             tmp.append(str(item[6]-datetime.datetime.now()))
-            exp_notify_list.append(tmp)
-    return exp_notify_list
+            tmp.append(item[7])
+            exped_notify_list.append(tmp)
+    return exped_notify_list
 
 def delete_data_use_serial_number(serial_number):
     connection = connector()
@@ -143,4 +156,4 @@ def delete_data_use_serial_number(serial_number):
     number = (str(serial_number),)
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
-#print(calculate_exp_notified_time()[0])
+#print(calculate_exped_notified_time())

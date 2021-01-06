@@ -20,17 +20,19 @@ def grab_photo():
 
         #make a list to store data
         data = []
+        scan_re = []
         for obj in decodedObjects:
             data.append(str(obj.data).split("'"))
             print(data[0][1])
 
             #check if is new data or not
-            pic.check_data(data[0][1])
-            
+            run_type = pic.check_data(data[0][1])
             #input data to database
             #db.create_new_data_with_qrcode(data[0][1])
 
         if len(data) != 0:
+            scan_re.append(data[0][1])
+            scan_re.append(str(run_type))
             break
 
     #close the camera
@@ -39,3 +41,4 @@ def grab_photo():
     #take a photo
     action = "fswebcam --save picture/" + data[0][1] + ".jpg"
     os.system(action)
+    return scan_re

@@ -22,7 +22,7 @@ def check_data(qrcode_number):
             put_in_again(qrcode_number)
             return int(3)
     else: # data is not exist
-        photoURL = BASE_DIR + '\\photo\\' + qrcode_number
+        photoURL = BASE_DIR + '/picture/' + qrcode_number + '.jpg'
         exptime = 0
         if qrcode_number[0] == 'A':
             exptime = datetime.timedelta(hours=8)
