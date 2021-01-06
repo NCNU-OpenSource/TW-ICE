@@ -23,15 +23,15 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__)) # catch token
 def getItemList():
     global totalList, itemString
     totalList = db.read_data_in_ref()
-    itemString = 'QRcode  name  expire_date' + '\n'
+    itemString = '編號 ===== 保存期限 ===== 名稱  ' + '\n'
     if totalList:
         for item in totalList:
             #tmp = item  # tmp[0]: pk, tmp[1]: qrcode, tmp[2]: item name, tmp[6]: expire_date
             # 如果食物還沒有設定品名
             if item[2] == None:
-                itemString = itemString + item[1] + '\t' + 'None ' + '\t' + str(item[6]) + '\n'
+                itemString = itemString + item[1] + '\t' + str(item[6]) + '\t' + 'None ' + '\n'
             else:
-                itemString = itemString + item[1] + '\t' + item[2]  + '\t' + str(item[6]) + '\n'
+                itemString = itemString + item[1] + '\t' + str(item[6])  + '\t' + item[2] + '\n'
     #冰箱中沒東西
     else:
         itemString =  "There is Nothing in the refrigerator :("
@@ -151,4 +151,4 @@ while 1:
         takeOffItem(scan_re[0])
     elif scan_re[1] == "3":
         putinItem(scan_re[0])
-    time.sleep(10)
+    time.sleep(1)
