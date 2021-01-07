@@ -118,7 +118,7 @@ clone檔案。
 ```shell
   python3 bot.py
 ```
-此時pi上顯示I'm listening... ， Telebot就可以開始執行了。
+此時pi上顯示I'm listening... ， Telebot就可以開始使用了。
 ## Telebot測試
 - 在Telegram上搜尋 : @tw_ice_bot
 - /help 列出所有按鈕
