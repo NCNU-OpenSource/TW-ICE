@@ -9,7 +9,7 @@ def connector():
     try:
         # connect to SQL
         connection = mysql.connector.connect(
-            host='10.33.20.8',  # host ip address
+            host='127.0.0.1',  # host ip address
             database='telebot', # database name
             user='TW_ICE_telebot', 
             password='lsa4')
@@ -61,6 +61,14 @@ def read_data_in_ref():
     connection = connector()
     mycursor = connection.cursor()
     sql = "SELECT * FROM {} WHERE product_status = 1"
+    mycursor.execute(sql.format(table_name))
+    myresult = mycursor.fetchall()
+    return myresult
+
+def read_data_not_in_ref():
+    connection = connector()
+    mycursor = connection.cursor()
+    sql = "SELECT * FROM {} WHERE product_status = 0"
     mycursor.execute(sql.format(table_name))
     myresult = mycursor.fetchall()
     return myresult
@@ -151,9 +159,10 @@ def calculate_exped_notified_time():
 def delete_data_use_serial_number(serial_number):
     connection = connector()
     mycursor = connection.cursor()
-
+    delete_photo_url = BASE_DIR + "/picture/" + serial_number + ".jpg"
+    os.remove(delete_photo_url)
     sql = "DELETE FROM {} WHERE serial_number = %s"
     number = (str(serial_number),)
     mycursor.execute(sql.format(table_name), number)
     connection.commit()
-#print(calculate_exped_notified_time())
+# create_new_table()  建立新資料表

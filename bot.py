@@ -3,6 +3,7 @@ import time
 import datetime
 import scan_cv as sc
 import picamera as pic
+import autodelete as ad
 from telepot.loop import MessageLoop
 from pprint import pprint
 from telepot.namedtuple import InlineKeyboardMarkup 
@@ -89,7 +90,8 @@ def on_chat_message(msg):
             replyBtns = [
                     [Btn(text='/show')],
                     [Btn(text='/update')],
-                    [Btn(text='/immediate_item'), Btn(text='/expiring_item')]
+                    [Btn(text='/immediate_item'), Btn(text='/expiring_item')],
+                    [Btn(text='/delete')]
                 ]
             bot.sendMessage(chat_id, 'Here\'s all function buttons', reply_markup=ReplyMarkup(keyboard=replyBtns))
         elif inputdata[0] == '/show' :
@@ -98,20 +100,23 @@ def on_chat_message(msg):
             bot.sendMessage(chat_id, show)
         elif inputdata[0] == '/update' :
             #QRcode illigle
-            if len(inputdata)==4 :
-                date = inputdata[3].split('/')
-                if len(date)==4 :
-                    t = datetime.datetime(year=int(date[0]), month = int(date[1]), day = int(date[2]), hour = int(date[3]))
-                    updateItem(inputdata[1],inputdata[2],t)
-                    bot.sendMessage(chat_id,  msg['text'] + '\n' + 'Success!')
-                elif len(date)==3 :
-                    t = datetime.datetime(year=int(date[0]), month = int(date[1]), day = int(date[2]))
-                    updateItem(inputdata[1],inputdata[2],t)
-                    bot.sendMessage(chat_id,  msg['text']+ '\n' + 'Success!')
-                else :
+            if db.read_specified_data_use_serial_number(inputdata[1]):
+                if len(inputdata)==4 :
+                    date = inputdata[3].split('/')
+                    if len(date)==4 :
+                        t = datetime.datetime(year=int(date[0]), month = int(date[1]), day = int(date[2]), hour = int(date[3]))
+                        updateItem(inputdata[1],inputdata[2],t)
+                        bot.sendMessage(chat_id,  msg['text'] + '\n' + 'Success!')
+                    elif len(date)==3 :
+                        t = datetime.datetime(year=int(date[0]), month = int(date[1]), day = int(date[2]))
+                        updateItem(inputdata[1],inputdata[2],t)
+                        bot.sendMessage(chat_id,  msg['text']+ '\n' + 'Success!')
+                    else :
+                        bot.sendMessage(chat_id, 'Usage:' + '\n' + '/update <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/update AXXXXX apple 2021/8/22/17')
+                else: 
                     bot.sendMessage(chat_id, 'Usage:' + '\n' + '/update <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/update AXXXXX apple 2021/8/22/17')
-            else: 
-                bot.sendMessage(chat_id, 'Usage:' + '\n' + '/update <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/update AXXXXX apple 2021/8/22/17')
+            else:
+                bot.sendMessage(chat_id,'QRcode not found!')
         elif inputdata[0] == '/immediate_item'  :
             immediateList = db.calculate_exp_notified_time()
             if immediateList :
@@ -134,7 +139,16 @@ def on_chat_message(msg):
                     # bot.sendMessage(chat_id,openurl)
                     bot.sendPhoto(chat_id, photo=open(openurl, 'rb'), caption =  'QRcode:' + item[0] +' ' + 'CountDown:' + item[1])
             else :
-                bot.sendMessage(chat_id, 'No food is expired !') 
+                bot.sendMessage(chat_id, 'No food is expired !')
+        elif inputdata[0] == '/delete' :
+            if db.read_specified_data_use_serial_number(inputdata[1]):
+                if len(inputdata)==2 : 
+                    db.delete_data_use_serial_number(inputdata[1])
+                    bot.sendMessage(chat_id, msg['text'] + '\n' + 'Success!')
+                else :
+                    bot.sendMessage(chat_id, 'Usage: /delete QRcode_number')
+            else :
+                bot.sendMessage(chat_id, 'QRcode is not found!') 
 
 with open(os.path.join(BASE_DIR, 'token.txt')) as f:
     TELEGRAM_BOT_TOKEN = f.read().strip() # Telegram Bot Token
@@ -143,6 +157,7 @@ print("I'm listening...")
     
 MessageLoop(bot,on_chat_message).run_as_thread()
 while 1:
+    ad.delete_proudct_out_off_time()
     scan_re = sc.grab_photo()
     # chat_id_list = {'781745255'}
     if scan_re[1] == "1": # new data
