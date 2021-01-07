@@ -95,7 +95,7 @@ clone檔案。
 ```shell
   vim DB_CRUD.py
 ```
-輸入資料表的名稱 table_name = 'your table name' ， 並且將最下面create_new_table()註解拿掉。
+輸入資料表的名稱 table_name = 'your table name'，在connector要輸入自己設定的sql密碼， 並且將最下面create_new_table()註解拿掉。
 ```python
   import mysql.connector
   from mysql.connector import Error
@@ -103,6 +103,21 @@ clone檔案。
   import datetime
   BASE_DIR = os.path.dirname(os.path.realpath(__file__))
   table_name = ''
+  def connector():
+    try:
+        # connect to SQL
+        connection = mysql.connector.connect(
+            host='127.0.0.1',  # host ip address
+            database='telebot', # database name
+            user='TW_ICE_telebot', 
+            password='yourpassword')
+
+        if connection.is_connected():
+            #print("already connected to database")
+            return connection
+
+    except Error as e:
+        print("Connect failed : ", e)
   ...
   ...
   ...
