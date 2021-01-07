@@ -12,7 +12,7 @@ def connector():
             host='127.0.0.1',  # host ip address
             database='telebot', # database name
             user='TW_ICE_telebot', 
-            password='lsa4')
+            password='your_password')
 
         if connection.is_connected():
             #print("already connected to database")
