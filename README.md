@@ -53,19 +53,20 @@
 ```shell
   sudo mysql -u root
 ```
-先建立一個 user，名稱為 TW_ICE_telebot，這樣可以從外部讀取資料庫內容。
+倘若需要從外部讀取資料，可以先建立一個 user，名稱為 TW_ICE_telebot，這樣可以從外部讀取資料庫內容。
 ```sql
-CREATE USER 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword';
+  CREATE USER 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword';
 ```
 在sql內建立一個database，名稱為 telebot。
 ```sql
   CREATE DATABASE telebot;
+  -- 給予TW_ICE_telebot權限更改資料庫內容
   GRANT ALL PRIVILEGES ON *.* TO 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword' ;
   FLUSH PRIVILEGES;
   EXIT
 ```
 ## 建立資料表
-需要手動建立資料表，先移至TW_ICE資料夾下
+需要手動建立資料表，先移至TW_ICE資料夾下。
 ```shell
   vim DB_CRUD.py
 ```
