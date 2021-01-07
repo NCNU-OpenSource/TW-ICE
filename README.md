@@ -48,3 +48,40 @@
 - 在telegram 中找到@BotFather 發送/newbot指令
 - 為機器人命名(需要以_bot結尾)取得機器人的token(擁有token就能操控機器人,所以不要隨意上傳到網路上!)
 - clone專案到pi上後建立token.txt, 將從@BotFather那邊拿到的token填入後存檔
+
+## 建立資料表
+需要手動建立資料表，先移至TW_ICE資料夾下
+```shell
+  vim DB_CRUD.py
+```
+輸入資料表的名稱 table_name = 'your table name' ， 並且將最下面create_new_table()註解拿掉
+```python
+  import mysql.connector
+  from mysql.connector import Error
+  import time, os
+  import datetime
+  BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+  table_name = ''
+  ...
+  ...
+  ...
+  # create_new_table()  建立新資料表
+```
+執行 DB_CRUD.py。
+```shell
+  python3 DB_CRUD.py
+```
+執行結束後將 create_new_table() 註解即可，資料表 table_name = 'your table name' 必須留著。
+## 執行程式
+接上 Web camera 之後之後開始執行bot.py這個程式。
+```shell
+  python3 bot.py
+```
+此時pi上顯示I'm listening. Telebot就可以開始執行了
+## Telebot測試
+- 在Telegram上搜尋 : @tw_ice_bot
+- /help 列出所有按鈕
+- /show 冰箱中所有食物列表
+- /update 更新食品內容
+- /immediate_item 即將過期的食品列表
+- /expiring_item 已過期食品列表
