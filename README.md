@@ -67,6 +67,20 @@
   FLUSH PRIVILEGES;
   EXIT
 ```
+## 從GitHub下載資料
+先下載git。
+```shell
+  sudo apt-get install git
+```
+clone檔案。
+```shell
+  git clone https://github.com/peter6098790/TW-ICE.git
+```
+之後進入TW_ICE資料庫內，並建立一個資料夾 picture，待會要放食品照片用
+```shell
+  cd ./TW_ICE
+  mkdir picture
+```
 ## 建立資料表
 需要手動建立資料表，先移至TW_ICE資料夾下。
 ```shell
