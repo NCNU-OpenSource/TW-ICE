@@ -45,16 +45,31 @@
 ```
 ## Telegram 申請 Bot token
 ### 建立自己的telegram bot
-- 在telegram 中找到@BotFather 發送/newbot指令
-- 為機器人命名(需要以_bot結尾)取得機器人的token(擁有token就能操控機器人,所以不要隨意上傳到網路上!)
-- clone專案到pi上後建立token.txt, 將從@BotFather那邊拿到的token填入後存檔
-
+- 在telegram 中找到@BotFather 發送/newbot指令。
+- 為機器人命名(需要以_bot結尾)取得機器人的token(擁有token就能操控機器人,所以不要隨意上傳到網路上!)。
+- clone專案到pi上後建立token.txt, 將從@BotFather那邊拿到的token填入後存檔。
+## 建立一個database讓telebot使用
+先進入 sql。
+```shell
+  sudo mysql -u root
+```
+先建立一個 user，名稱為 TW_ICE_telebot，這樣可以從外部讀取資料庫內容。
+```sql
+CREATE USER 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword';
+```
+在sql內建立一個database，名稱為 telebot。
+```sql
+  CREATE DATABASE telebot;
+  GRANT ALL PRIVILEGES ON *.* TO 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword' ;
+  FLUSH PRIVILEGES;
+  EXIT
+```
 ## 建立資料表
 需要手動建立資料表，先移至TW_ICE資料夾下
 ```shell
   vim DB_CRUD.py
 ```
-輸入資料表的名稱 table_name = 'your table name' ， 並且將最下面create_new_table()註解拿掉
+輸入資料表的名稱 table_name = 'your table name' ， 並且將最下面create_new_table()註解拿掉。
 ```python
   import mysql.connector
   from mysql.connector import Error
@@ -77,7 +92,7 @@
 ```shell
   python3 bot.py
 ```
-此時pi上顯示I'm listening. Telebot就可以開始執行了
+此時pi上顯示I'm listening... ， Telebot就可以開始執行了。
 ## Telebot測試
 - 在Telegram上搜尋 : @tw_ice_bot
 - /help 列出所有按鈕
