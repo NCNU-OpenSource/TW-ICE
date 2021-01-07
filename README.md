@@ -76,10 +76,15 @@ clone檔案。
 ```shell
   git clone https://github.com/peter6098790/TW-ICE.git
 ```
-之後進入TW_ICE資料庫內，並建立一個資料夾 picture，待會要放食品照片用
+之後進入TW_ICE資料庫內，並建立一個資料夾 picture，待會要放食品照片用。
 ```shell
   cd ./TW_ICE
   mkdir picture
+```
+在同一個資料夾下方新增 token.txt，把 Telegram bot 的 token 寫入 token.txt
+```shell
+  vim token.txt
+  1234679000:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 ## 建立資料表
 需要手動建立資料表，先移至TW_ICE資料夾下。
