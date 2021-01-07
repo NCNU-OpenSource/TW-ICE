@@ -88,15 +88,15 @@ def on_chat_message(msg):
         if inputdata[0] == '/help' :
             replyBtns = [
                     [Btn(text='/show')],
-                    [Btn(text='/updateInfo')],
-                    [Btn(text='/Immediate_item'), Btn(text='/Expiring_item')]
+                    [Btn(text='/update')],
+                    [Btn(text='/immediate_item'), Btn(text='/expiring_item')]
                 ]
             bot.sendMessage(chat_id, 'Here\'s all function buttons', reply_markup=ReplyMarkup(keyboard=replyBtns))
         elif inputdata[0] == '/show' :
             show = ''
             show = getItemList()
             bot.sendMessage(chat_id, show)
-        elif inputdata[0] == '/updateInfo' :
+        elif inputdata[0] == '/update' :
             #QRcode illigle
             if len(inputdata)==4 :
                 date = inputdata[3].split('/')
@@ -109,10 +109,10 @@ def on_chat_message(msg):
                     updateItem(inputdata[1],inputdata[2],t)
                     bot.sendMessage(chat_id,  msg['text']+ '\n' + 'Success!')
                 else :
-                    bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
+                    bot.sendMessage(chat_id, 'Usage:' + '\n' + '/update <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/update AXXXXX apple 2021/8/22/17')
             else: 
-                bot.sendMessage(chat_id, 'Usage:' + '\n' + '/updateInfo <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/updateInfo AXXXXX apple 2021/8/22/17')
-        elif inputdata[0] == '/Immediate_item'  :
+                bot.sendMessage(chat_id, 'Usage:' + '\n' + '/update <QRcode> <item_name> <Year/Month/Day/Hour>' + '\n' + 'Example:' + '\n'+ '/update AXXXXX apple 2021/8/22/17')
+        elif inputdata[0] == '/immediate_item'  :
             immediateList = db.calculate_exp_notified_time()
             if immediateList :
                 bot.sendMessage(chat_id, 'These foods are about to expire !')
@@ -121,10 +121,10 @@ def on_chat_message(msg):
                     openurl = item[2]
                     # 開發時測試用
                     # bot.sendMessage(chat_id,openurl)
-                    bot.sendPhoto(chat_id, photo=open(openurl, 'rb'), caption =  'Name:' + item[0] +' ' + 'CountDown:' + item[1])
+                    bot.sendPhoto(chat_id, photo=open(openurl, 'rb'), caption =  'QRcode:' + item[0] +' ' + 'CountDown:' + item[1])
             else :
                 bot.sendMessage(chat_id, 'No food is about to expire!')
-        elif inputdata[0] == '/Expiring_item'  :
+        elif inputdata[0] == '/expiring_item'  :
             expiredList = db.calculate_exped_notified_time()
             if expiredList:
                 bot.sendMessage(chat_id, 'These foods are expired !')
@@ -132,7 +132,7 @@ def on_chat_message(msg):
                 for item in expiredList:
                     openurl = item[2]
                     # bot.sendMessage(chat_id,openurl)
-                    bot.sendPhoto(chat_id, photo=open(openurl, 'rb'), caption =  'Name:' + item[0] +' ' + 'CountDown:' + item[1])
+                    bot.sendPhoto(chat_id, photo=open(openurl, 'rb'), caption =  'QRcode:' + item[0] +' ' + 'CountDown:' + item[1])
             else :
                 bot.sendMessage(chat_id, 'No food is expired !') 
 
