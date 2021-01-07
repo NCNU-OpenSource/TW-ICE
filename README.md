@@ -57,7 +57,7 @@
 ```
 安全設定，建議全部填Y即可，想要了解內容可以細讀。
 ```shell
-sudo mysql_secure_installation
+  sudo mysql_secure_installation
 ```
 倘若需要從外部讀取資料，可以先建立一個 user，名稱為 TW_ICE_telebot，這樣可以從外部讀取資料庫內容。
 ```sql
