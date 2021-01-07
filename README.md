@@ -41,7 +41,7 @@
 ```
 ## 安裝 SQL connector
 ```shell
-  pip install mysql-connector-python
+  pip3 install mysql-connector-python
 ```
 ## Telegram 申請 Bot token
 ### 建立自己的telegram bot
