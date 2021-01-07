@@ -55,6 +55,10 @@
 ```shell
   sudo mysql -u root
 ```
+安全設定，建議全部填Y即可，想要了解內容可以細讀。
+```shell
+  sudo mysql_secure_installation
+```
 倘若需要從外部讀取資料，可以先建立一個 user，名稱為 TW_ICE_telebot，這樣可以從外部讀取資料庫內容。
 ```sql
   CREATE USER 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword';
@@ -66,6 +70,25 @@
   GRANT ALL PRIVILEGES ON *.* TO 'TW_ICE_telebot'@'%.%.%.%' IDENTIFIED BY 'yourpassword' ;
   FLUSH PRIVILEGES;
   EXIT
+```
+## 從GitHub下載資料
+先下載git。
+```shell
+  sudo apt-get install git
+```
+clone檔案。
+```shell
+  git clone https://github.com/peter6098790/TW-ICE.git
+```
+之後進入TW_ICE資料庫內，並建立一個資料夾 picture，待會要放食品照片用。
+```shell
+  cd ./TW_ICE
+  mkdir picture
+```
+在同一個資料夾下方新增 token.txt，把 Telegram bot 的 token 寫入 token.txt
+```shell
+  vi token.txt
+  1234679000:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 ## 建立資料表
 需要手動建立資料表，先移至TW_ICE資料夾下。
@@ -95,7 +118,7 @@
 ```shell
   python3 bot.py
 ```
-此時pi上顯示I'm listening... ， Telebot就可以開始執行了。
+此時pi上顯示I'm listening... ， Telebot就可以開始使用了。
 ## Telebot測試
 - 在Telegram上搜尋 : @tw_ice_bot
 - /help 列出所有按鈕
@@ -103,3 +126,10 @@
 - /update 更新食品內容
 - /immediate_item 即將過期的食品列表
 - /expiring_item 已過期食品列表
+## QR code 編碼
+<br>QR code 編碼需要以下方是編號才會自動輸入過期時間，會以開頭編號代表即將過期時間，以下:</br>
+<br> A (8小時)、B (16小時)、C (24小時)、D (36小時)、E (48小時) </br>
+<br>代碼後方可接上數字，可以為0000-9999，倘若需要更多號碼，可以輸入00000-99999等，本次實驗室以00001五碼為基礎。</br>
+使用網站：https://qr.ioi.tw/zh/
+
+
