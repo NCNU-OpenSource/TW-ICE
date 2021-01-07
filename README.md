@@ -83,7 +83,7 @@ clone檔案。
 ```
 在同一個資料夾下方新增 token.txt，把 Telegram bot 的 token 寫入 token.txt
 ```shell
-  vim token.txt
+  vi token.txt
   1234679000:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 ## 建立資料表
