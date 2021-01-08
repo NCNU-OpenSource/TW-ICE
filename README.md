@@ -1,10 +1,11 @@
 # 概念敘述
 常常將食物放在冰箱裡就忘記了，不知不覺就放到過期，導致食物的浪費，TW ICE 想到透過樹梅派與Web Cam搭配自製QR Code條碼，將食物放入冰箱前先貼上貼紙掃描後，便可以記錄冰箱中各食材的存放時間，並在快過期時推播訊息提醒使用者。
 # 所需設備
-- Raspberry pi 4 一台(需先安裝好Ubuntu 18.04)
+- Raspberry pi 4 一台(建議安裝Ubuntu 18.04)
 - Webcam 一台
 # Pi 4 安裝套件
 ## 安裝 python pip install
+注意! linux有分pip & pip3 install，下方兩個都要安裝。
 ```shell
   sudo apt update
   sudo apt install python-pip
