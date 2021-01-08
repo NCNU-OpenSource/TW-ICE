@@ -94,12 +94,14 @@ def on_chat_message(msg):
                     [Btn(text='/delete')]
                 ]
             bot.sendMessage(chat_id, 'Here\'s all function buttons', reply_markup=ReplyMarkup(keyboard=replyBtns))
+        elif inputdata[0] == '/start' :
+            bot.sendMessage(chat_id, 'Welcome!' + '\n' + '輸入/help 指令可以列出所有指令按鈕喔')
         elif inputdata[0] == '/show' :
             show = ''
             show = getItemList()
             bot.sendMessage(chat_id, show)
         elif inputdata[0] == '/update' :
-            #QRcode illigle
+            #檢查QRcode 是否已經存在於資料庫中
             if db.read_specified_data_use_serial_number(inputdata[1]):
                 if len(inputdata)==4 :
                     date = inputdata[3].split('/')
